@@ -11,5 +11,10 @@
     <input type="text" placeholder="Username"> <br>
     <input type="password" placeholder="Password"> <br>
     <button>Login</button>
+    
+    @foreach ($users as $user)
+        <p>{{ $user['user_name'] }}</p>
+    @endforeach
+
 </body>
 </html>

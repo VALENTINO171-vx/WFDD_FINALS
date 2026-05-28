@@ -9,6 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 */
 
-Route::get('/test', function () {
-    return response()->json(['message' => 'You are now in backend API']);
-});
+Route::get('/users', [App\Http\Controllers\API\v1\UserController::class, 'getUsers']);
