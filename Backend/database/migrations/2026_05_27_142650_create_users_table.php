@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('user_email')->unique();
             $table->string('user_password');
             $table->string('user_role')->default('user');
+            $table->boolean('blacklist')->default(false);
             $table->timestamps();
         });
     }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('restaurant_address');
             $table->string('restaurant_phone')->nullable();
             $table->string('restaurant_cuisine')->nullable();
+            $table->string('restaurant_image')->nullable();
             $table->timestamps();
         });
     }
