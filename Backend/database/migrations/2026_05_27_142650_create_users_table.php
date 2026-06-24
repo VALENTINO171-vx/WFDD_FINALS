@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('user_role')->default('user');
             $table->timestamps();
         });
+
     }
 
     /**
