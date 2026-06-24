@@ -22,6 +22,7 @@ class RestaurantSeeder extends Seeder
             'restaurant_address' => 'Jl. kapuas 5, Kediri',
             'restaurant_phone' => '08116728347',
             'restaurant_cuisine' => 'Nasi Gurih',
+            'restaurant_image' => '',
         ],[
             'restaurant_id' => 2,
             'restaurant_name' => 'Burgerzilla',
@@ -29,6 +30,7 @@ class RestaurantSeeder extends Seeder
             'restaurant_address' => 'Jl. Lakarsantri, Surabaya',
             'restaurant_phone' => '08518800289',
             'restaurant_cuisine' => 'Burger',
+            'restaurant_image' => '',
         ],
         
 
