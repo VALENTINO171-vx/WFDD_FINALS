@@ -33,15 +33,15 @@
                         <tbody>
                             @forelse($restaurants ?? [] as $restaurant)
                                 <tr class="hover:bg-gray-50 transition">
-                                    <td class="px-4 py-3 text-center">{{ $restaurant->id }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $restaurant->name }}</td>
+                                    <td class="px-4 py-3 text-center">{{ $restaurant->restaurant_id }}</td>
+                                    <td class="px-4 py-3 text-center">{{ $restaurant->restaurant_name }}</td>
                                     <td class="px-4 py-3 text-center">
-                                        <a href="{{ route('restaurants.edit', $restaurant->id) }}" class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-sm rounded transition inline-block">
+                                        <a href="{{ route('restaurants.edit', $restaurant->restaurant_id) }}" class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white text-sm rounded transition inline-block">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        <form action="{{ route('restaurants.destroy', $restaurant->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('restaurants.destroy', $restaurant->restaurant_id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition" onclick="return confirm('Are you sure?')">
@@ -50,7 +50,7 @@
                                         </form>
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        <a href="{{ route('restaurants.show', $restaurant->id) }}" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded transition inline-block">
+                                        <a href="{{ route('restaurants.show', $restaurant->restaurant_id) }}" class="px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded transition inline-block">
                                             <i class="fas fa-eye"></i> View
                                         </a>
                                     </td>
@@ -81,18 +81,18 @@
                         <tbody>
                             @forelse($users ?? [] as $user)
                                 <tr class="hover:bg-gray-50 transition">
-                                    <td class="px-4 py-3 text-center">{{ $user->id }}</td>
-                                    <td class="px-4 py-3 text-center">{{ $user->name }}</td>
+                                    <td class="px-4 py-3 text-center">{{ $user->user_id }}</td>
+                                    <td class="px-4 py-3 text-center">{{ $user->user_name }}</td>
                                     <td class="px-4 py-3 text-center">
-                                        <form action="{{ route('users.toggle-blacklist', $user->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('users.toggle-blacklist', $user->user_id) }}" method="POST" class="inline">
                                             @csrf
                                             <button type="submit" class="px-3 py-1 bg-yellow-500 hover:bg-yellow-600 text-gray-800 text-sm rounded transition">
-                                                <i class="fas fa-ban"></i> {{ $user->is_blacklisted ? 'Unblacklist' : 'Blacklist' }}
+                                                <i class="fas fa-ban"></i> {{ $user->blacklist ? 'Blacklisted' : 'Unblacklisted' }}
                                             </button>
                                         </form>
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline">
+                                        <form action="{{ route('users.destroy', $user->user_id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition" onclick="return confirm('Are you sure?')">
