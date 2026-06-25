@@ -8,13 +8,14 @@
     <title>Document</title>
 </head>
 <body>
-    <input type="text" placeholder="Username"> <br>
-    <input type="password" placeholder="Password"> <br>
-    <button>Login</button>
-    
     @foreach ($users as $user)
         <p>{{ $user['user_name'] }}</p>
     @endforeach
-
+    <form action="{{ route('login.authenticate') }}" method="POST">
+        @csrf
+        <input type="text" name="username" placeholder="Username"> <br>
+        <input type="password" name="password" placeholder="Password"> <br>
+        <button type="submit">Login</button>
+    </form>
 </body>
 </html>
