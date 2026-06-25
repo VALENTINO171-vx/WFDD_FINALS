@@ -17,3 +17,6 @@ Route::get('/users/{user_name}', [App\Http\Controllers\API\v1\UserController::cl
 
 //get restaurant
 Route::get('/restaurants',[App\Http\Controllers\API\v1\RestaurantController::class, 'getRestaurants']);
+
+//get reviews
+Route::get('/reviews',[App\Http\Controllers\ReviewController::class,'getReviews']);

@@ -26,7 +26,7 @@
     <main class="bg-gray-50 shadow-md rounded-3xl p-8 flex-grow mb-6">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            @if($restaurants->isEmpty())
+            @if(empty($restaurants))
                 <div class="col-span-1 md:col-span-3 text-center py-12 text-gray-500 font-medium">
                     No restaurants found.
                 </div>
@@ -35,20 +35,17 @@
                     <div class="group flex flex-col bg-white border border-gray-200 shadow-sm hover:shadow-xl rounded-2xl overflow-hidden transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
                         
                         <div class="p-4 font-bold text-gray-800 text-center border-b border-gray-100 group-hover:text-orange-500 transition-colors">
-                            {{ $resto->restaurant_name ?? 'Unnamed Restaurant' }}
+                            {{ $resto['restaurant_name'] ?? 'Unnamed Restaurant' }}
                         </div>
                         
                         <div class="h-48 overflow-hidden bg-gray-100">
-                            @if(!empty($resto->restaurant_image))
+                            @if(!empty($resto['restaurant_image']))
                                 <img src="{{ $resto->restaurant_image }}" alt="{{ $resto->restaurant_name }}" class="w-full h-full object-cover">
                             @else
                                 <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&auto=format&fit=crop&q=60" alt="Default Image" class="w-full h-full object-cover">
                             @endif
                         </div>
                         
-                        <div class="p-3 text-sm font-medium text-center text-gray-500 bg-gray-50">
-                            124 Reviews
-                        </div>
                     </div>
                 @endforeach
             @endif

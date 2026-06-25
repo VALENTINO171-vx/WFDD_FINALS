@@ -17,7 +17,7 @@ class HomeController extends Controller
 
         $data = Http::get('http://127.0.0.1:8003/api/restaurants');
         $restaurants = $data->json();
-        dd($restaurants);
-        return view('home', compact('restaurants'));
+
+        return view('home', $restaurants);
     }
 }
