@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
+
+class HomeController extends Controller
+{
+    //
+    public function index()
+    {
+        if (!Session::has('user_id')) {
+            return redirect('/login')->with('error', 'Please login first');
+        }
+
+        $data = Http::get('http://127.0.0.1:8003/api/restaurants');
+        $restaurants = $data->json();
+        dd($restaurants);
+        return view('home', compact('restaurants'));
+    }
+}

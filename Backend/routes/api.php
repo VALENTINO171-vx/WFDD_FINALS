@@ -9,4 +9,11 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 */
 
+//get users for login
 Route::get('/users', [App\Http\Controllers\API\v1\UserController::class, 'getUsers']);
+
+//get specific user for auth
+Route::get('/users/{user_name}', [App\Http\Controllers\API\v1\UserController::class, 'getUser']);
+
+//get restaurant
+Route::get('/restaurants',[App\Http\Controllers\API\v1\RestaurantController::class, 'getRestaurants']);

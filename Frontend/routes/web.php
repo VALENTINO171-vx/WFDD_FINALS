@@ -16,7 +16,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'showLogin']);
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
-Route::get('/home', [App\Http\Controllers\AuthController::class, 'home']);
 
 // User Management Routes
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index']);

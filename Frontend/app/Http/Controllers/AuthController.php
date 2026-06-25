@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
@@ -24,33 +23,18 @@ class AuthController extends Controller
             'user_password' => 'required'
         ]);
 
-        $data = Http::get('http://127.0.0.1:8003/api/users');
+        $data = Http::get('http://127.0.0.1:8003/api/users/'.$request->user_name);
         $users = $data->json();
 
-        // Find the user by username
-        $user = collect($data->json())->firstWhere('user_name', $request->user_name);
-        dd(collect($data->json())->firstWhere('user_name', $request->user_name));
+        if ($users && Hash::check($request->user_password, $users['user']['user_password'])) {
+            Session::put('user_id', $users['user']['user_id']);
+            Session::put('user_name', $users['user']['user_name']);
+            Session::put('user_role', $users['user']['user_role']);
 
-        if ($user && Hash::check($request->user_password, $user['user_password'])) {
-            Session::put('user_id', $user['user_id']);
-            Session::put('user_name', $user['user_name']);
-            Session::put('user_role', $user['user_role']);
-            
             return redirect('/home')->with('success', 'Login successful!');
         }
 
         return back()->with('error', 'Invalid credentials');
-    }
-
-    // Show home/dashboard
-    public function home()
-    {
-        if (!Session::has('user_id')) {
-            return redirect('/login')->with('error', 'Please login first');
-        }
-
-        $user = UserModel::find(Session::get('user_id'));
-        return view('home', ['user' => $user]);
     }
 
     // Logout
