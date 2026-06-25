@@ -17,7 +17,7 @@ class LoginController extends Controller
     public function authenticateUser(Request $request){
         // Authentication logic here
         $credentials = $request->validate([
-            'username' => 'required|string',
+            'user_name' => 'required|string',
             'password' => 'required|string',
         ]);
 
