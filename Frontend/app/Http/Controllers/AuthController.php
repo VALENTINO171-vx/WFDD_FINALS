@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -22,12 +23,17 @@ class AuthController extends Controller
             'user_password' => 'required'
         ]);
 
-        $user = UserModel::where('user_name', $request->user_name)->first();
+        $data = Http::get('http://127.0.0.1:8003/api/users');
+        $users = $data->json();
+        dd($users);
 
-        if ($user && Hash::check($request->user_password, $user->user_password)) {
-            Session::put('user_id', $user->user_id);
-            Session::put('user_name', $user->user_name);
-            Session::put('user_role', $user->user_role);
+        // Find the user by username
+        $user = collect($data->json())->firstWhere('user_name', $request->user_name);
+
+        if ($user && Hash::check($request->user_password, $user['user_password'])) {
+            Session::put('user_id', $user['user_id']);
+            Session::put('user_name', $user['user_name']);
+            Session::put('user_role', $user['user_role']);
             
             return redirect('/home')->with('success', 'Login successful!');
         }
