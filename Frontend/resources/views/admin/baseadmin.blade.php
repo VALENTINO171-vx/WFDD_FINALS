@@ -18,7 +18,12 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <!-- Restaurant List Section -->
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-xl font-semibold text-gray-800 mb-5 pb-3 border-b-2 border-blue-500">Restaurant List</h2>
+                <div class="flex justify-between items-center mb-5 pb-3 border-b-2 border-blue-500">
+                    <h2 class="text-xl font-semibold text-gray-800">Restaurant List</h2>
+                    <a href="{{ route('restaurants.create') }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition text-sm font-semibold">
+                        <i class="fas fa-plus mr-2"></i>Add Restaurant
+                    </a>
+                </div>
                 <div class="overflow-x-auto rounded-lg">
                     <table class="w-full">
                         <thead class="bg-gray-100">
