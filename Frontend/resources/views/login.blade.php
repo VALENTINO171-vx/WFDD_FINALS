@@ -11,7 +11,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(0deg, #ff9267 0%, #ffc280 100%);
         }
         .login-container {
             background: white;
@@ -32,7 +32,7 @@
         .btn-login {
             width: 100%;
             padding: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(180deg, #ff5e1e 0%, #ff8630 100%);
             color: white;
             border: none;
             border-radius: 5px;
