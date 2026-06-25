@@ -50,7 +50,7 @@ class AuthController extends Controller
         }
 
         $user = UserModel::find(Session::get('user_id'));
-        return view('home', ['user' => $user, 'restaurants' => $restaurant->json()['restaurants']]);
+        return view('home', ['user' => $user]);
     }
 
     // Logout
