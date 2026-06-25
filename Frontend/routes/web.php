@@ -11,11 +11,6 @@ Route::get('/login', [App\Http\Controllers\LoginController::class, 'index'])->na
 Route::middleware('auth')->group(function(){
 
 });
-Route::post('/login', [App\Http\Controllers\LoginController::class, 'authenticateUser'])->name('login.authenticate');
-
-Route::get('/feed', function () {
-    return view('feed');
-});
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
 
 // Authentication Routes
