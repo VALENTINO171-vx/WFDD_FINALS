@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -49,7 +50,7 @@ class AuthController extends Controller
         }
 
         $user = UserModel::find(Session::get('user_id'));
-        return view('home', ['user' => $user]);
+        return view('home', ['user' => $user, 'restaurants' => $restaurant->json()['restaurants']]);
     }
 
     // Logout
