@@ -15,6 +15,8 @@ class UserModel extends Model
         'user_password',
         'user_role',
     ];
-
-
+    public function reviews()
+    {
+        return $this->hasMany(ReviewModel::class, 'user_id', 'user_id');
+    }
 }
