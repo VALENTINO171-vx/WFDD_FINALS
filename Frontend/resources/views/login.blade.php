@@ -9,7 +9,7 @@
 </head>
 <body>
     @foreach ($users as $user)
-        <p>{{ $user['user_name'] }}</p>
+        <p>{{ $user['username'] }}</p>
     @endforeach
     <form action="{{ route('login.authenticate') }}" method="POST">
         @csrf
