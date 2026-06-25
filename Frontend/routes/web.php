@@ -7,7 +7,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', [App\Http\Controllers\LoginController::class, 'index'])->name('login.index')->middleware('guest');
 Route::middleware('auth')->group(function(){
 
 });
