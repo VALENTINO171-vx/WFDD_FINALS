@@ -25,10 +25,10 @@ class AuthController extends Controller
 
         $data = Http::get('http://127.0.0.1:8003/api/users');
         $users = $data->json();
-        dd($users);
 
         // Find the user by username
         $user = collect($data->json())->firstWhere('user_name', $request->user_name);
+        dd(collect($data->json())->firstWhere('user_name', $request->user_name));
 
         if ($user && Hash::check($request->user_password, $user['user_password'])) {
             Session::put('user_id', $user['user_id']);

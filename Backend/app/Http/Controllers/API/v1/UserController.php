@@ -10,6 +10,7 @@ class UserController
     //
     public function getUsers(){
         $user = UserModel::all();
+        
         return response()->json(['users' => $user],200);
     }
     public function getUser($id){
