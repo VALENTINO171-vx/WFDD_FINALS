@@ -15,6 +15,9 @@ Route::get('/users', [App\Http\Controllers\API\v1\UserController::class, 'getUse
 //get specific user for auth
 Route::get('/users/{user_name}', [App\Http\Controllers\API\v1\UserController::class, 'getUser']);
 
+// toggle blacklist status
+Route::post('/users/{id}/toggle-blacklist', [App\Http\Controllers\API\v1\UserController::class, 'toggleBlacklist']);
+
 //get restaurant
 Route::get('/restaurants',[App\Http\Controllers\API\v1\RestaurantController::class, 'getRestaurants']);
 Route::get('/restaurants/{id}',[App\Http\Controllers\API\v1\RestaurantController::class, 'getRestaurant']);
