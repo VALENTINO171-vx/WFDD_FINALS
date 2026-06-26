@@ -145,7 +145,7 @@
                             @if(session('error'))
                                 <div class="rounded-xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 mb-4">{{ session('error') }}</div>
                             @endif
-                            <form action="{{ route('restaurant.reviews.submit', $restaurant->restaurant_id) }}" method="POST" class="space-y-4">
+                            <form action="{{ route('admin.restaurant.reviews.submit', $restaurant->restaurant_id) }}" method="POST" class="space-y-4">
                                 @csrf
                                 <input type="hidden" name="admin" value="1">
                                 <div>
@@ -180,7 +180,7 @@
 
                                             @if($isAuthor)
                                                 <div class="flex flex-wrap gap-3">
-                                                    <form action="{{ route('restaurant.reviews.update', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="flex flex-wrap gap-2 w-full">
+                                                    <form action="{{ route('admin.restaurant.reviews.update', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="flex flex-wrap gap-2 w-full">
                                                         @csrf
                                                         @method('PUT')
                                                         <input type="hidden" name="admin" value="1">
@@ -188,7 +188,7 @@
                                                         <textarea name="review_comment" rows="2" class="flex-1 rounded-2xl border border-gray-300 px-3 py-2 focus:border-orange-500 focus:ring-orange-500">{{ old('review_comment', $review->review_comment ?? '') }}</textarea>
                                                         <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition">Save</button>
                                                     </form>
-                                                    <form action="{{ route('restaurant.reviews.destroy', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="inline">
+                                                    <form action="{{ route('admin.restaurant.reviews.destroy', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <input type="hidden" name="admin" value="1">
@@ -196,7 +196,7 @@
                                                     </form>
                                                 </div>
                                             @elseif($isAdmin)
-                                                <form action="{{ route('restaurant.reviews.destroy', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="inline-flex">
+                                                <form action="{{ route('admin.restaurant.reviews.destroy', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="inline-flex">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" name="admin" value="1">

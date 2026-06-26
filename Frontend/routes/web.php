@@ -52,6 +52,9 @@ Route::middleware(App\Http\Middleware\AuthenticateMiddleware::class)->group(func
         Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destroyAdmin'])->name('users.destroy');
 
         // Review Management Routes (Admin)
+        Route::post('/restaurants/{id}/reviews', [App\Http\Controllers\RestaurantController::class, 'submitReview'])->name('admin.restaurant.reviews.submit');
+        Route::put('/restaurants/{restaurantId}/reviews/{reviewId}', [App\Http\Controllers\RestaurantController::class, 'updateReview'])->name('admin.restaurant.reviews.update');
+        Route::delete('/restaurants/{restaurantId}/reviews/{reviewId}', [App\Http\Controllers\RestaurantController::class, 'deleteReview'])->name('admin.restaurant.reviews.destroy');
         Route::delete('/reviews/{id}', [App\Http\Controllers\AdminController::class, 'deleteReview'])->name('admin.reviews.delete');
     });
 });
