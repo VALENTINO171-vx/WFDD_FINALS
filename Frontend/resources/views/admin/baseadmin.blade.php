@@ -94,7 +94,7 @@
                             <!-- Action Buttons -->
                             <div class="p-4 border-t border-gray-100 flex gap-2">
                                 <a href="{{ route('restaurants.show', $restaurant['restaurant_id']) }}" class="flex-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded-lg transition text-center font-semibold">
-                                    <i class="fas fa-eye mr-1"></i>View
+                                    <i class="fas fa-star mr-1"></i>Review
                                 </a>
                                 <a href="{{ route('restaurants.edit', $restaurant['restaurant_id']) }}" class="flex-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white text-sm rounded-lg transition text-center font-semibold">
                                     <i class="fas fa-edit mr-1"></i>Edit
@@ -114,7 +114,7 @@
         </div>
 
         <!-- Users Section -->
-        <div>
+        <div class="mb-12">
             <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-4 border-b-2 border-orange-500">
                 <i class="fas fa-users text-orange-500 mr-2"></i>User Management
             </h2>
