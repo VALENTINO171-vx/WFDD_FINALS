@@ -21,6 +21,14 @@ Route::post('/users/{id}/toggle-blacklist', [App\Http\Controllers\API\v1\UserCon
 //get restaurant
 Route::get('/restaurants',[App\Http\Controllers\API\v1\RestaurantController::class, 'getRestaurants']);
 Route::get('/restaurants/{id}',[App\Http\Controllers\API\v1\RestaurantController::class, 'getRestaurant']);
+Route::post('/restaurants', [App\Http\Controllers\API\v1\RestaurantController::class, 'store']);
+Route::put('/restaurants/{id}', [App\Http\Controllers\API\v1\RestaurantController::class, 'update']);
+Route::delete('/restaurants/{id}', [App\Http\Controllers\API\v1\RestaurantController::class, 'destroy']);
+
+// restaurant menu management
+Route::post('/restaurants/{id}/menus', [App\Http\Controllers\API\v1\MenuController::class, 'store']);
+Route::put('/menus/{id}', [App\Http\Controllers\API\v1\MenuController::class, 'update']);
+Route::delete('/menus/{id}', [App\Http\Controllers\API\v1\MenuController::class, 'destroy']);
 
 // restaurant reviews
 Route::post('/restaurants/{id}/reviews',[App\Http\Controllers\API\v1\ReviewController::class,'store']);

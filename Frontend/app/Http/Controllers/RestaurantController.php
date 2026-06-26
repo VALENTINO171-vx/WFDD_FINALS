@@ -255,6 +255,79 @@ class RestaurantController extends Controller
         }
     }
 
+    public function storeMenu(Request $request, $restaurantId)
+    {
+        $validated = $request->validate([
+            'menu_item_name' => 'required|string',
+            'menu_item_description' => 'nullable|string',
+            'menu_item_price' => 'required|numeric|min:0',
+            'menu_item_available' => 'nullable|boolean',
+            'menu_item_category' => 'nullable|string',
+        ]);
+
+        try {
+            $response = Http::post($this->apiBaseUrl . '/api/restaurants/' . $restaurantId . '/menus', [
+                'menu_item_name' => $validated['menu_item_name'],
+                'menu_item_description' => $validated['menu_item_description'] ?? null,
+                'menu_item_price' => $validated['menu_item_price'],
+                'menu_item_available' => $validated['menu_item_available'] ?? true,
+                'menu_item_category' => $validated['menu_item_category'] ?? null,
+            ]);
+
+            if ($response->successful()) {
+                return redirect()->route('restaurants.show', $restaurantId)->with('success', 'Menu item added successfully!');
+            }
+
+            return back()->with('error', 'Failed to add menu item');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
+        }
+    }
+
+    public function updateMenu(Request $request, $restaurantId, $menuId)
+    {
+        $validated = $request->validate([
+            'menu_item_name' => 'required|string',
+            'menu_item_description' => 'nullable|string',
+            'menu_item_price' => 'required|numeric|min:0',
+            'menu_item_available' => 'nullable|boolean',
+            'menu_item_category' => 'nullable|string',
+        ]);
+
+        try {
+            $response = Http::put($this->apiBaseUrl . '/api/menus/' . $menuId, [
+                'menu_item_name' => $validated['menu_item_name'],
+                'menu_item_description' => $validated['menu_item_description'] ?? null,
+                'menu_item_price' => $validated['menu_item_price'],
+                'menu_item_available' => $validated['menu_item_available'] ?? true,
+                'menu_item_category' => $validated['menu_item_category'] ?? null,
+            ]);
+
+            if ($response->successful()) {
+                return redirect()->route('restaurants.show', $restaurantId)->with('success', 'Menu item updated successfully!');
+            }
+
+            return back()->with('error', 'Failed to update menu item');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
+        }
+    }
+
+    public function destroyMenu(Request $request, $restaurantId, $menuId)
+    {
+        try {
+            $response = Http::delete($this->apiBaseUrl . '/api/menus/' . $menuId);
+
+            if ($response->successful()) {
+                return redirect()->route('restaurants.show', $restaurantId)->with('success', 'Menu item deleted successfully!');
+            }
+
+            return back()->with('error', 'Failed to delete menu item');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
+        }
+    }
+
     /**
      * Delete restaurant
      */

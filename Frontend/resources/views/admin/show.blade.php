@@ -96,12 +96,49 @@
 
                     <!-- Menu Section -->
                     <div class="rounded-3xl bg-white shadow-md p-6 mt-8">
-                        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Menu</h2>
+                        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+                            <h2 class="text-2xl font-semibold text-gray-900">Menu</h2>
+                            <button type="button" onclick="document.getElementById('addMenuForm').classList.toggle('hidden')" class="px-4 py-2 rounded-xl bg-orange-500 text-white hover:bg-orange-600 transition font-semibold">Add Menu Item</button>
+                        </div>
+
+                        <div id="addMenuForm" class="hidden rounded-3xl border border-gray-200 p-6 mb-6 bg-gray-50">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">New Menu Item</h3>
+                            <form action="{{ route('admin.restaurant.menus.store', $restaurant->restaurant_id) }}" method="POST" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                @csrf
+                                <div class="space-y-3">
+                                    <label class="block text-sm font-medium text-gray-700">Item Name</label>
+                                    <input type="text" name="menu_item_name" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500" required>
+                                </div>
+                                <div class="space-y-3">
+                                    <label class="block text-sm font-medium text-gray-700">Category</label>
+                                    <input type="text" name="menu_item_category" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500">
+                                </div>
+                                <div class="space-y-3">
+                                    <label class="block text-sm font-medium text-gray-700">Price</label>
+                                    <input type="number" name="menu_item_price" step="0.01" min="0" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500" required>
+                                </div>
+                                <div class="space-y-3">
+                                    <label class="block text-sm font-medium text-gray-700">Availability</label>
+                                    <select name="menu_item_available" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500">
+                                        <option value="1">Available</option>
+                                        <option value="0">Unavailable</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-3 lg:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                                    <textarea name="menu_item_description" rows="3" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500"></textarea>
+                                </div>
+                                <div class="lg:col-span-2">
+                                    <button type="submit" class="w-full px-6 py-3 rounded-2xl bg-green-500 text-white font-semibold hover:bg-green-600 transition">Save menu item</button>
+                                </div>
+                            </form>
+                        </div>
+
                         @if(!empty($restaurant->menus) && count($restaurant->menus) > 0)
                             <div class="space-y-4">
                                 @foreach($restaurant->menus as $menu)
                                     <div class="rounded-2xl border border-gray-200 p-4 hover:border-orange-300 transition">
-                                        <div class="flex items-center justify-between gap-4">
+                                        <div class="flex items-start justify-between gap-4">
                                             <div>
                                                 <h3 class="text-lg font-semibold text-gray-900">{{ $menu->menu_item_name ?? 'Menu Item' }}</h3>
                                                 <p class="text-sm text-gray-600">{{ $menu->menu_item_description ?? 'No description' }}</p>
@@ -113,6 +150,32 @@
                                                 </p>
                                             </div>
                                             <span class="text-orange-600 font-bold">₱{{ number_format($menu->menu_item_price ?? 0, 2) }}</span>
+                                        </div>
+
+                                        <div class="mt-6 grid gap-4 lg:grid-cols-2">
+                                            <form action="{{ route('admin.restaurant.menus.update', ['restaurantId' => $restaurant->restaurant_id, 'menuId' => $menu->menu_item_id]) }}" method="POST" class="space-y-3">
+                                                @csrf
+                                                @method('PUT')
+                                                <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                                                    <input type="text" name="menu_item_name" value="{{ $menu->menu_item_name }}" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500" required>
+                                                    <input type="text" name="menu_item_category" value="{{ $menu->menu_item_category }}" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500">
+                                                </div>
+                                                <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+                                                    <input type="number" name="menu_item_price" step="0.01" min="0" value="{{ $menu->menu_item_price }}" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500" required>
+                                                    <select name="menu_item_available" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500">
+                                                        <option value="1" {{ $menu->menu_item_available ? 'selected' : '' }}>Available</option>
+                                                        <option value="0" {{ !$menu->menu_item_available ? 'selected' : '' }}>Unavailable</option>
+                                                    </select>
+                                                </div>
+                                                <textarea name="menu_item_description" rows="2" class="w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500">{{ $menu->menu_item_description }}</textarea>
+                                                <button type="submit" class="w-full rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 transition">Update item</button>
+                                            </form>
+
+                                            <form action="{{ route('admin.restaurant.menus.destroy', ['restaurantId' => $restaurant->restaurant_id, 'menuId' => $menu->menu_item_id]) }}" method="POST" class="flex items-end">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="w-full rounded-2xl bg-red-600 px-4 py-3 text-sm font-semibold text-white hover:bg-red-700 transition" onclick="return confirm('Delete this menu item?')">Delete item</button>
+                                            </form>
                                         </div>
                                     </div>
                                 @endforeach

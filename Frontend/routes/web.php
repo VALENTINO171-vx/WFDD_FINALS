@@ -55,6 +55,9 @@ Route::middleware(App\Http\Middleware\AuthenticateMiddleware::class)->group(func
         Route::post('/restaurants/{id}/reviews', [App\Http\Controllers\RestaurantController::class, 'submitReview'])->name('admin.restaurant.reviews.submit');
         Route::put('/restaurants/{restaurantId}/reviews/{reviewId}', [App\Http\Controllers\RestaurantController::class, 'updateReview'])->name('admin.restaurant.reviews.update');
         Route::delete('/restaurants/{restaurantId}/reviews/{reviewId}', [App\Http\Controllers\RestaurantController::class, 'deleteReview'])->name('admin.restaurant.reviews.destroy');
+        Route::post('/restaurants/{id}/menus', [App\Http\Controllers\RestaurantController::class, 'storeMenu'])->name('admin.restaurant.menus.store');
+        Route::put('/restaurants/{restaurantId}/menus/{menuId}', [App\Http\Controllers\RestaurantController::class, 'updateMenu'])->name('admin.restaurant.menus.update');
+        Route::delete('/restaurants/{restaurantId}/menus/{menuId}', [App\Http\Controllers\RestaurantController::class, 'destroyMenu'])->name('admin.restaurant.menus.destroy');
         Route::delete('/reviews/{id}', [App\Http\Controllers\AdminController::class, 'deleteReview'])->name('admin.reviews.delete');
     });
 });
