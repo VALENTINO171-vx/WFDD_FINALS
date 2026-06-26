@@ -14,7 +14,7 @@
                 Restau-Rant
             </div>
         </a>
-        
+        @csrf      
         <form action="{{ url('/home/' . request('search')) }}" method="GET" class="flex gap-4">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Bar" class="px-5 py-2.5 bg-white text-black outline-none w-72 shadow-inner rounded-xl focus:ring-2 focus:ring-orange-300 transition-all">
             <button type="submit" class="px-6 py-2.5 bg-white text-black font-semibold hover:bg-orange-600 hover:text-white transition-all duration-200 cursor-pointer shadow-sm rounded-xl">
@@ -61,6 +61,7 @@
     <footer class="bg-orange-500 shadow-md rounded-2xl p-4 text-center text-sm font-bold text-white tracking-wide">
         Copyright &copy; 2026 Restau-Rant
     </footer>
+    {{ url('/home/' . request('search')) }}
 
 </body>
 </html>

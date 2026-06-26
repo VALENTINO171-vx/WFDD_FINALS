@@ -43,7 +43,7 @@ class AuthController extends Controller
                 return redirect('/admin')->with('success', 'Login successful! Welcome to Admin Panel');
             }
 
-            return redirect('/home')->with('success', 'Login successful!');
+            return redirect('/home/')->with('success', 'Login successful!');
         }
 
         return back()->with('error', 'Invalid credentials');

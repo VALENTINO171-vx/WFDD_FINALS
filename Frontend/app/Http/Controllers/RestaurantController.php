@@ -345,5 +345,7 @@ class RestaurantController extends Controller
             return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
         }
     }
+
+    
 }
 

@@ -24,6 +24,7 @@ Route::get('/restaurants/{id}',[App\Http\Controllers\API\v1\RestaurantController
 Route::post('/restaurants', [App\Http\Controllers\API\v1\RestaurantController::class, 'store']);
 Route::put('/restaurants/{id}', [App\Http\Controllers\API\v1\RestaurantController::class, 'update']);
 Route::delete('/restaurants/{id}', [App\Http\Controllers\API\v1\RestaurantController::class, 'destroy']);
+Route::get('/restaurants/search/{restaurant_name}',[App\Http\Controllers\API\v1\RestaurantController::class,'search']);
 
 // restaurant menu management
 Route::post('/restaurants/{id}/menus', [App\Http\Controllers\API\v1\MenuController::class, 'store']);
