@@ -153,13 +153,6 @@
                                                     <i class="fas fa-ban"></i>
                                                 </button>
                                             </form>
-                                            <form action="{{ route('users.destroy', $user['user_id']) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded-lg transition" onclick="return confirm('Are you sure?')" title="Delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
