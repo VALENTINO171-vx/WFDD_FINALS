@@ -34,5 +34,17 @@ Route::middleware(App\Http\Middleware\AuthenticateMiddleware::class)->group(func
         Route::get('/', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('admin.dashboard.alt');
         Route::get('/index', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.index');
+
+        // Restaurant Management Routes
+        Route::get('/restaurants/create', [App\Http\Controllers\RestaurantController::class, 'create'])->name('restaurants.create');
+        Route::post('/restaurants', [App\Http\Controllers\RestaurantController::class, 'store'])->name('restaurants.store');
+        Route::get('/restaurants/{id}/edit', [App\Http\Controllers\RestaurantController::class, 'edit'])->name('restaurants.edit');
+        Route::put('/restaurants/{id}', [App\Http\Controllers\RestaurantController::class, 'update'])->name('restaurants.update');
+        Route::get('/restaurants/{id}', [App\Http\Controllers\RestaurantController::class, 'show'])->name('restaurants.show');
+        Route::delete('/restaurants/{id}', [App\Http\Controllers\RestaurantController::class, 'destroy'])->name('restaurants.destroy');
+
+        // User Management Routes (Admin)
+        Route::post('/users/{id}/toggle-blacklist', [App\Http\Controllers\UserController::class, 'toggleBlacklist'])->name('users.toggle-blacklist');
+        Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destroyAdmin'])->name('users.destroy');
     });
 });

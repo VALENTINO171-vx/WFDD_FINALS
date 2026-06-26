@@ -24,12 +24,18 @@ class AdminController extends Controller
             $restaurantsData = $restaurantsResponse->json();
             $restaurants = $restaurantsData['restaurants'] ?? [];
 
+            $usersResponse = Http::get($this->apiBaseUrl . '/api/users');
+            $usersData = $usersResponse->json();
+            $users = $usersData['users'] ?? [];
+
             return view('admin.baseadmin', [
-                'restaurants' => $restaurants
+                'restaurants' => $restaurants,
+                'users' => $users
             ]);
         } catch (\Exception $e) {
             return view('admin.baseadmin', [
                 'restaurants' => [],
+                'users' => [],
                 'error' => 'Unable to connect to backend API'
             ]);
         }

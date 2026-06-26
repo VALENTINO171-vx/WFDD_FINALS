@@ -5,6 +5,7 @@ use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
 
 class UserController extends Controller
 {
@@ -109,5 +110,45 @@ class UserController extends Controller
         $this->checkAuth();
         $user = UserModel::findOrFail($id);
         return view('users.show', ['user' => $user]);
+    }
+
+    /**
+     * Toggle user blacklist status (Admin API)
+     */
+    public function toggleBlacklist($id)
+    {
+        $apiBaseUrl = env('API_BASE_URL', 'http://127.0.0.1:8003');
+
+        try {
+            $response = Http::post($apiBaseUrl . '/api/users/' . $id . '/toggle-blacklist');
+            
+            if ($response->successful()) {
+                return redirect('/admin')->with('success', 'User blacklist status updated!');
+            } else {
+                return back()->with('error', 'Failed to update user blacklist status');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Delete user (Admin API)
+     */
+    public function destroyAdmin($id)
+    {
+        $apiBaseUrl = env('API_BASE_URL', 'http://127.0.0.1:8003');
+
+        try {
+            $response = Http::delete($apiBaseUrl . '/api/users/' . $id);
+            
+            if ($response->successful()) {
+                return redirect('/admin')->with('success', 'User deleted successfully!');
+            } else {
+                return back()->with('error', 'Failed to delete user');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
+        }
     }
 }
