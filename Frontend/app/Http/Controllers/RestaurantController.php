@@ -218,6 +218,38 @@ class RestaurantController extends Controller
     }
 
     /**
+     * Submit a review for a restaurant
+     */
+    public function submitReview(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'review_comment' => 'nullable|string|max:1000',
+            'review_rating' => 'required|integer|min:1|max:5',
+        ]);
+
+        $payload = [
+            'user_id' => session('user_id'),
+            'restaurant_id' => $id,
+            'review_comment' => $validated['review_comment'] ?? null,
+            'review_rating' => $validated['review_rating'],
+        ];
+
+        try {
+            $response = Http::post($this->apiBaseUrl . '/api/restaurants/' . $id . '/reviews', $payload);
+
+            $redirectRoute = $request->boolean('admin') ? 'restaurants.show' : 'restaurant.details';
+
+            if ($response->successful()) {
+                return redirect()->route($redirectRoute, $id)->with('success', 'Review submitted successfully!');
+            }
+
+            return redirect()->route($redirectRoute, $id)->with('error', 'Failed to submit review');
+        } catch (\Exception $e) {
+            return redirect()->route($redirectRoute ?? 'restaurant.details', $id)->with('error', 'Error connecting to backend API: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Delete restaurant
      */
     public function destroy($id)

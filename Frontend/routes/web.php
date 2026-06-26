@@ -15,7 +15,7 @@ Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 // Protected Routes - Require Authentication
 Route::middleware(App\Http\Middleware\AuthenticateMiddleware::class)->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
-    Route::get('/restaurant/{id}', [App\Http\Controllers\RestaurantController::class, 'details'])->name('restaurant.details');
+    Route::get('/restaurant/{id}', [App\Http\Controllers\RestaurantController::class, 'show'])->name('restaurant.details');
     Route::post('/restaurant/{id}/reviews', [App\Http\Controllers\RestaurantController::class, 'submitReview'])->name('restaurant.reviews.submit');
     Route::put('/restaurant/{restaurantId}/reviews/{reviewId}', [App\Http\Controllers\RestaurantController::class, 'updateReview'])->name('restaurant.reviews.update');
     Route::delete('/restaurant/{restaurantId}/reviews/{reviewId}', [App\Http\Controllers\RestaurantController::class, 'deleteReview'])->name('restaurant.reviews.destroy');
@@ -50,5 +50,8 @@ Route::middleware(App\Http\Middleware\AuthenticateMiddleware::class)->group(func
         // User Management Routes (Admin)
         Route::post('/users/{id}/toggle-blacklist', [App\Http\Controllers\UserController::class, 'toggleBlacklist'])->name('users.toggle-blacklist');
         Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destroyAdmin'])->name('users.destroy');
+
+        // Review Management Routes (Admin)
+        Route::delete('/reviews/{id}', [App\Http\Controllers\AdminController::class, 'deleteReview'])->name('admin.reviews.delete');
     });
 });

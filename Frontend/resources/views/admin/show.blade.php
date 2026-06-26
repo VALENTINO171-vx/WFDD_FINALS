@@ -107,6 +107,52 @@
                             </button>
                         </form>
                     </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+                        <div class="rounded-3xl bg-white shadow-md p-6">
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Leave a review</h2>
+                            @if(session('success'))
+                                <div class="rounded-xl bg-green-50 border border-green-200 text-green-700 px-4 py-3 mb-4">{{ session('success') }}</div>
+                            @endif
+                            @if(session('error'))
+                                <div class="rounded-xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 mb-4">{{ session('error') }}</div>
+                            @endif
+                            <form action="{{ route('restaurant.reviews.submit', $restaurant->restaurant_id) }}" method="POST" class="space-y-4">
+                                @csrf
+                                <input type="hidden" name="admin" value="1">
+                                <div>
+                                    <label for="review_rating" class="block text-sm font-medium text-gray-700">Rating (1-5)</label>
+                                    <input type="number" name="review_rating" id="review_rating" min="1" max="5" value="{{ old('review_rating', 5) }}" class="mt-1 block w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500" required>
+                                    @error('review_rating')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
+                                </div>
+                                <div>
+                                    <label for="review_comment" class="block text-sm font-medium text-gray-700">Comment</label>
+                                    <textarea name="review_comment" id="review_comment" rows="5" class="mt-1 block w-full rounded-2xl border border-gray-300 px-4 py-3 focus:border-orange-500 focus:ring-orange-500">{{ old('review_comment') }}</textarea>
+                                    @error('review_comment')<p class="mt-2 text-sm text-red-600">{{ $message }}</p>@enderror
+                                </div>
+                                <button type="submit" class="w-full inline-flex justify-center rounded-2xl bg-orange-600 px-4 py-3 font-semibold text-white hover:bg-orange-700 transition">Submit review</button>
+                            </form>
+                        </div>
+
+                        <div class="rounded-3xl bg-white shadow-md p-6">
+                            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Reviews</h2>
+                            @if(!empty($restaurant->reviews) && count($restaurant->reviews) > 0)
+                                <div class="space-y-4">
+                                    @foreach($restaurant->reviews as $review)
+                                        <div class="rounded-2xl border border-gray-200 p-4">
+                                            <div class="flex items-center justify-between mb-2 gap-4">
+                                                <span class="font-semibold text-gray-900">{{ $review->user->user_name ?? 'Guest' }}</span>
+                                                <span class="text-orange-600 font-bold">{{ $review->review_rating ?? '0' }}/5</span>
+                                            </div>
+                                            <p class="text-gray-700">{{ $review->review_comment ?? 'No comment provided.' }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p class="text-gray-500">No reviews yet. Be the first to review this restaurant.</p>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
