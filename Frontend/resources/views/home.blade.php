@@ -15,12 +15,15 @@
             </div>
         </a>
         
-        <form action="{{ url('/home') }}" method="GET" class="flex gap-4">
+        <form action="{{ url('/home/' . request('search')) }}" method="GET" class="flex gap-4">
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Bar" class="px-5 py-2.5 bg-white text-black outline-none w-72 shadow-inner rounded-xl focus:ring-2 focus:ring-orange-300 transition-all">
             <button type="submit" class="px-6 py-2.5 bg-white text-black font-semibold hover:bg-orange-600 hover:text-white transition-all duration-200 cursor-pointer shadow-sm rounded-xl">
                 Search
             </button>
         </form>
+        <a href="{{ url('/logout') }}" class="px-6 py-2.5 bg-white text-orange-600 font-semibold hover:bg-red-500 hover:text-white transition-all duration-200 cursor-pointer shadow-sm rounded-xl">
+            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+        </a>
     </header>
 
     <main class="bg-gray-50 shadow-md rounded-3xl p-8 flex-grow mb-6">
