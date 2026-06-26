@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
+    private $apiBaseUrl;
+
+    public function __construct()
+    {
+        $this->apiBaseUrl = env('API_BASE_URL', 'http://127.0.0.1:8003');
+    }
+
     // Show login form
     public function showLogin()
     {
@@ -23,13 +30,18 @@ class AuthController extends Controller
             'user_password' => 'required'
         ]);
 
-        $data = Http::get('http://127.0.0.1:8003/api/users/'.$request->user_name);
+        $data = Http::get($this->apiBaseUrl . '/api/users/'.$request->user_name);
         $users = $data->json();
 
         if ($users && Hash::check($request->user_password, $users['user']['user_password'])) {
             Session::put('user_id', $users['user']['user_id']);
             Session::put('user_name', $users['user']['user_name']);
             Session::put('user_role', $users['user']['user_role']);
+
+            // Redirect admin users to admin panel
+            if (strtolower($users['user']['user_role']) === 'admin') {
+                return redirect('/admin')->with('success', 'Login successful! Welcome to Admin Panel');
+            }
 
             return redirect('/home')->with('success', 'Login successful!');
         }
