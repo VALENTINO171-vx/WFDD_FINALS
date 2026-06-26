@@ -32,21 +32,23 @@
                 </div>
             @else
                 @foreach($restaurants as $resto)
-                    <div class="group flex flex-col bg-white border border-gray-200 shadow-sm hover:shadow-xl rounded-2xl overflow-hidden transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 ease-in-out cursor-pointer">
-                        
+                    <a href="{{ route('restaurant.details', $resto['restaurant_id']) }}" class="group block flex flex-col bg-white border border-gray-200 shadow-sm hover:shadow-xl rounded-2xl overflow-hidden transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 ease-in-out">
                         <div class="p-4 font-bold text-gray-800 text-center border-b border-gray-100 group-hover:text-orange-500 transition-colors">
                             {{ $resto['restaurant_name'] ?? 'Unnamed Restaurant' }}
                         </div>
                         
                         <div class="h-48 overflow-hidden bg-gray-100">
                             @if(!empty($resto['restaurant_image']))
-                                <img src="{{ $resto->restaurant_image }}" alt="{{ $resto->restaurant_name }}" class="w-full h-full object-cover">
+                                <img src="{{ $resto['restaurant_image'] }}" alt="{{ $resto['restaurant_name'] }}" class="w-full h-full object-cover">
                             @else
                                 <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&auto=format&fit=crop&q=60" alt="Default Image" class="w-full h-full object-cover">
                             @endif
                         </div>
                         
-                    </div>
+                        <div class="p-4 text-sm text-gray-600">
+                            {{ Str::limit($resto['restaurant_description'] ?? 'No description available', 80) }}
+                        </div>
+                    </a>
                 @endforeach
             @endif
 

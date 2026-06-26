@@ -17,6 +17,7 @@ Route::get('/users/{user_name}', [App\Http\Controllers\API\v1\UserController::cl
 
 //get restaurant
 Route::get('/restaurants',[App\Http\Controllers\API\v1\RestaurantController::class, 'getRestaurants']);
+Route::get('/restaurants/{id}',[App\Http\Controllers\API\v1\RestaurantController::class, 'getRestaurant']);
 
-//get reviews
-Route::get('/reviews',[App\Http\Controllers\ReviewController::class,'getReviews']);
+// restaurant reviews
+Route::post('/restaurants/{id}/reviews',[App\Http\Controllers\API\v1\ReviewController::class,'store']);

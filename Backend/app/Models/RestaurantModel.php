@@ -9,12 +9,12 @@ class RestaurantModel extends Model
     protected $table = 'restaurants';
     protected $primaryKey = 'restaurant_id';
     protected $fillable = [
-        'name',
-        'address',
-        'phone_number',
-        'email',
-        'website',
-        'description',
+        'restaurant_name',
+        'restaurant_description',
+        'restaurant_cuisine',
+        'restaurant_address',
+        'restaurant_phone',
+        'restaurant_image',
     ];
     public function menus()
     {

@@ -13,8 +13,14 @@ class RestaurantController extends Controller
         $restaurant = RestaurantModel::all();
         return response()->json(['restaurants' => $restaurant],200);
     }
+
     public function getRestaurant($id){
-        $restaurant = RestaurantModel::find($id);
+        $restaurant = RestaurantModel::with(['menus','reviews.user'])->find($id);
+
+        if (!$restaurant) {
+            return response()->json(['message' => 'Restaurant not found'], 404);
+        }
+
         return response()->json(['restaurant' => $restaurant],200);
     }
 }
