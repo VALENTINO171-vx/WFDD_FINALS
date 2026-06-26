@@ -37,14 +37,13 @@ class ReviewController extends Controller
         $validated = $request->validate([
             'review_comment' => 'nullable|string|max:1000',
             'review_rating' => 'required|integer|min:1|max:5',
-            'user_id' => 'nullable|integer|exists:users,user_id',
+            'user_id' => 'required|integer|exists:users,user_id',
             'user_role' => 'nullable|string',
         ]);
 
-        $userId = $validated['user_id'] ?? null;
-        $userRole = strtolower($validated['user_role'] ?? '');
+        $userId = $validated['user_id'];
 
-        if ($userId && $review->user_id !== $userId && $userRole !== 'admin') {
+        if ($review->user_id !== $userId) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
@@ -64,14 +63,14 @@ class ReviewController extends Controller
         }
 
         $validated = $request->validate([
-            'user_id' => 'nullable|integer|exists:users,user_id',
+            'user_id' => 'required|integer|exists:users,user_id',
             'user_role' => 'nullable|string',
         ]);
 
-        $userId = $validated['user_id'] ?? null;
+        $userId = $validated['user_id'];
         $userRole = strtolower($validated['user_role'] ?? '');
 
-        if ($userId && $review->user_id !== $userId && $userRole !== 'admin') {
+        if ($review->user_id !== $userId && $userRole !== 'admin') {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 

@@ -94,6 +94,34 @@
                         </div>
                     </div>
 
+                    <!-- Menu Section -->
+                    <div class="rounded-3xl bg-white shadow-md p-6 mt-8">
+                        <h2 class="text-2xl font-semibold text-gray-900 mb-4">Menu</h2>
+                        @if(!empty($restaurant->menus) && count($restaurant->menus) > 0)
+                            <div class="space-y-4">
+                                @foreach($restaurant->menus as $menu)
+                                    <div class="rounded-2xl border border-gray-200 p-4 hover:border-orange-300 transition">
+                                        <div class="flex items-center justify-between gap-4">
+                                            <div>
+                                                <h3 class="text-lg font-semibold text-gray-900">{{ $menu->menu_item_name ?? 'Menu Item' }}</h3>
+                                                <p class="text-sm text-gray-600">{{ $menu->menu_item_description ?? 'No description' }}</p>
+                                                <p class="text-sm text-gray-500 mt-1">Category: {{ $menu->menu_item_category ?? 'Uncategorized' }}</p>
+                                                <p class="text-sm font-medium mt-2">
+                                                    <span class="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold {{ !empty($menu->menu_item_available) && $menu->menu_item_available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                                        {{ !empty($menu->menu_item_available) && $menu->menu_item_available ? 'Available' : 'Unavailable' }}
+                                                    </span>
+                                                </p>
+                                            </div>
+                                            <span class="text-orange-600 font-bold">₱{{ number_format($menu->menu_item_price ?? 0, 2) }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <p class="text-gray-500">No menu items found for this restaurant.</p>
+                        @endif
+                    </div>
+
                     <!-- Action Buttons -->
                     <div class="flex gap-4 pt-8 border-t border-gray-200">
                         <a href="{{ route('restaurants.edit', $restaurant->restaurant_id) }}" class="flex-1 px-6 py-3 bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 text-white font-semibold rounded-xl transition shadow-md text-center">
@@ -139,12 +167,42 @@
                             @if(!empty($restaurant->reviews) && count($restaurant->reviews) > 0)
                                 <div class="space-y-4">
                                     @foreach($restaurant->reviews as $review)
+                                        @php
+                                            $isAuthor = session('user_id') === ($review->user->user_id ?? null);
+                                            $isAdmin = strtolower(session('user_role') ?? '') === 'admin';
+                                        @endphp
                                         <div class="rounded-2xl border border-gray-200 p-4">
                                             <div class="flex items-center justify-between mb-2 gap-4">
                                                 <span class="font-semibold text-gray-900">{{ $review->user->user_name ?? 'Guest' }}</span>
                                                 <span class="text-orange-600 font-bold">{{ $review->review_rating ?? '0' }}/5</span>
                                             </div>
-                                            <p class="text-gray-700">{{ $review->review_comment ?? 'No comment provided.' }}</p>
+                                            <p class="text-gray-700 mb-3">{{ $review->review_comment ?? 'No comment provided.' }}</p>
+
+                                            @if($isAuthor)
+                                                <div class="flex flex-wrap gap-3">
+                                                    <form action="{{ route('restaurant.reviews.update', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="flex flex-wrap gap-2 w-full">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="admin" value="1">
+                                                        <input type="number" name="review_rating" min="1" max="5" value="{{ old('review_rating', $review->review_rating ?? 5) }}" class="w-20 rounded-2xl border border-gray-300 px-3 py-2 focus:border-orange-500 focus:ring-orange-500" required>
+                                                        <textarea name="review_comment" rows="2" class="flex-1 rounded-2xl border border-gray-300 px-3 py-2 focus:border-orange-500 focus:ring-orange-500">{{ old('review_comment', $review->review_comment ?? '') }}</textarea>
+                                                        <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition">Save</button>
+                                                    </form>
+                                                    <form action="{{ route('restaurant.reviews.destroy', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="hidden" name="admin" value="1">
+                                                        <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition">Delete</button>
+                                                    </form>
+                                                </div>
+                                            @elseif($isAdmin)
+                                                <form action="{{ route('restaurant.reviews.destroy', ['restaurantId' => $restaurant->restaurant_id, 'reviewId' => $review->review_id]) }}" method="POST" class="inline-flex">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input type="hidden" name="admin" value="1">
+                                                    <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition">Delete</button>
+                                                </form>
+                                            @endif
                                         </div>
                                     @endforeach
                                 </div>

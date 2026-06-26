@@ -100,6 +100,30 @@ class RestaurantController extends Controller
     }
 
     /**
+     * Show restaurant details for admin users
+     */
+    public function show($id)
+    {
+        try {
+            $response = Http::get($this->apiBaseUrl . '/api/restaurants/' . $id);
+            
+            if ($response->successful()) {
+                $data = $response->json();
+                $restaurant = $data['restaurant'] ?? null;
+                
+                if ($restaurant) {
+                    $restaurant = json_decode(json_encode($restaurant));
+                    return view('admin.show', ['restaurant' => $restaurant]);
+                }
+            }
+            
+            return redirect('/admin')->with('error', 'Restaurant not found');
+        } catch (\Exception $e) {
+            return redirect('/admin')->with('error', 'Error fetching restaurant: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Show restaurant details for frontend users
      */
     public function details($id)
@@ -133,6 +157,7 @@ class RestaurantController extends Controller
         ]);
 
         $userId = session('user_id');
+        $userRole = strtolower(session('user_role') ?? '');
         if (!$userId) {
             return redirect('/login')->with('error', 'Please login first');
         }
@@ -142,12 +167,17 @@ class RestaurantController extends Controller
             'restaurant_id' => $id,
             'review_rating' => $validated['review_rating'],
             'review_comment' => $validated['review_comment'] ?? null,
+            'user_role' => $userRole,
         ];
 
         try {
             $response = Http::post($this->apiBaseUrl . '/api/restaurants/' . $id . '/reviews', $payload);
             
             if ($response->successful()) {
+                if ($request->boolean('admin') && $userRole === 'admin') {
+                    return redirect()->route('restaurants.show', $id)->with('success', 'Review submitted successfully!');
+                }
+
                 return redirect()->route('restaurant.details', $id)->with('success', 'Review submitted successfully!');
             }
 
@@ -166,7 +196,7 @@ class RestaurantController extends Controller
         ]);
 
         $userId = session('user_id');
-        $userRole = session('user_role');
+        $userRole = strtolower(session('user_role') ?? '');
         if (!$userId) {
             return redirect('/login')->with('error', 'Please login first');
         }
@@ -182,6 +212,10 @@ class RestaurantController extends Controller
             $response = Http::put($this->apiBaseUrl . '/api/reviews/' . $reviewId, $payload);
             
             if ($response->successful()) {
+                if ($request->boolean('admin') && $userRole === 'admin') {
+                    return redirect()->route('restaurants.show', $restaurantId)->with('success', 'Review updated successfully!');
+                }
+
                 return redirect()->route('restaurant.details', $restaurantId)->with('success', 'Review updated successfully!');
             }
 
@@ -195,7 +229,7 @@ class RestaurantController extends Controller
     public function deleteReview(Request $request, $restaurantId, $reviewId)
     {
         $userId = session('user_id');
-        $userRole = session('user_role');
+        $userRole = strtolower(session('user_role') ?? '');
         if (!$userId) {
             return redirect('/login')->with('error', 'Please login first');
         }
@@ -207,6 +241,10 @@ class RestaurantController extends Controller
             ]);
             
             if ($response->successful()) {
+                if ($request->boolean('admin') && $userRole === 'admin') {
+                    return redirect()->route('restaurants.show', $restaurantId)->with('success', 'Review deleted successfully!');
+                }
+
                 return redirect()->route('restaurant.details', $restaurantId)->with('success', 'Review deleted successfully!');
             }
 
@@ -214,38 +252,6 @@ class RestaurantController extends Controller
             return back()->with('error', $message);
         } catch (\Exception $e) {
             return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Submit a review for a restaurant
-     */
-    public function submitReview(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'review_comment' => 'nullable|string|max:1000',
-            'review_rating' => 'required|integer|min:1|max:5',
-        ]);
-
-        $payload = [
-            'user_id' => session('user_id'),
-            'restaurant_id' => $id,
-            'review_comment' => $validated['review_comment'] ?? null,
-            'review_rating' => $validated['review_rating'],
-        ];
-
-        try {
-            $response = Http::post($this->apiBaseUrl . '/api/restaurants/' . $id . '/reviews', $payload);
-
-            $redirectRoute = $request->boolean('admin') ? 'restaurants.show' : 'restaurant.details';
-
-            if ($response->successful()) {
-                return redirect()->route($redirectRoute, $id)->with('success', 'Review submitted successfully!');
-            }
-
-            return redirect()->route($redirectRoute, $id)->with('error', 'Failed to submit review');
-        } catch (\Exception $e) {
-            return redirect()->route($redirectRoute ?? 'restaurant.details', $id)->with('error', 'Error connecting to backend API: ' . $e->getMessage());
         }
     }
 

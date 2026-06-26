@@ -15,7 +15,7 @@ Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 // Protected Routes - Require Authentication
 Route::middleware(App\Http\Middleware\AuthenticateMiddleware::class)->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index']);
-    Route::get('/restaurant/{id}', [App\Http\Controllers\RestaurantController::class, 'show'])->name('restaurant.details');
+    Route::get('/restaurant/{id}', [App\Http\Controllers\RestaurantController::class, 'details'])->name('restaurant.details');
     Route::post('/restaurant/{id}/reviews', [App\Http\Controllers\RestaurantController::class, 'submitReview'])->name('restaurant.reviews.submit');
     Route::put('/restaurant/{restaurantId}/reviews/{reviewId}', [App\Http\Controllers\RestaurantController::class, 'updateReview'])->name('restaurant.reviews.update');
     Route::delete('/restaurant/{restaurantId}/reviews/{reviewId}', [App\Http\Controllers\RestaurantController::class, 'deleteReview'])->name('restaurant.reviews.destroy');

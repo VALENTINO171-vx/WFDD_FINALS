@@ -111,7 +111,7 @@
                                         $isAdmin = strtolower(session('user_role') ?? '') === 'admin';
                                     @endphp
 
-                                    @if($isAuthor || $isAdmin)
+                                    @if($isAuthor)
                                         <div class="flex flex-wrap gap-3">
                                             <form action="{{ route('restaurant.reviews.update', ['restaurantId' => $restaurant['restaurant_id'], 'reviewId' => $review['review_id']]) }}" method="POST" class="flex flex-wrap gap-2 w-full">
                                                 @csrf
@@ -126,6 +126,12 @@
                                                 <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition">Delete</button>
                                             </form>
                                         </div>
+                                    @elseif($isAdmin)
+                                        <form action="{{ route('restaurant.reviews.destroy', ['restaurantId' => $restaurant['restaurant_id'], 'reviewId' => $review['review_id']]) }}" method="POST" class="inline-flex">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 transition">Delete</button>
+                                        </form>
                                     @endif
                                 </div>
                             @endforeach
