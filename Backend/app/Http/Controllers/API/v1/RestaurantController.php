@@ -73,4 +73,11 @@ class RestaurantController extends Controller
 
         return response()->json(['message' => 'Restaurant deleted successfully'], 200);
     }
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+        $restaurants = RestaurantModel::where('restaurant_name', 'like', '%' . $query . '%')->get();
+
+        return response()->json(['restaurants' => $restaurants], 200);
+    }
 }
