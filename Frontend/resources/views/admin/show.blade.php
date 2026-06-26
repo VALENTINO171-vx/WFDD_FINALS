@@ -34,18 +34,11 @@
 
                 <div class="p-8 space-y-8">
                     <!-- Image Section -->
-                    @if(isset($restaurant->restaurant_image))
-                        <div class="rounded-xl overflow-hidden shadow-md">
-                            <img src="{{ asset('storage/' . $restaurant->restaurant_image) }}" alt="{{ $restaurant->restaurant_name }}" class="w-full h-96 object-cover">
-                        </div>
-                    @else
-                        <div class="rounded-xl overflow-hidden shadow-md bg-gray-200 h-96 flex items-center justify-center">
-                            <div class="text-center text-gray-500">
-                                <i class="fas fa-image text-4xl mb-2"></i>
-                                <p>No image available</p>
-                            </div>
-                        </div>
-                    @endif
+                            @if(!empty($resto['restaurant_image']))
+                                <img src="{{ $resto['restaurant_image'] }}" alt="{{ $resto['restaurant_name'] }}" class="w-full h-full object-cover">
+                            @else
+                                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=500&auto=format&fit=crop&q=60" alt="Default Image" class="w-full h-full object-cover">
+                            @endif
 
                     <!-- Details Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
