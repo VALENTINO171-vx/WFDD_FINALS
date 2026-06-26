@@ -17,6 +17,10 @@ class MenuModel extends Model
         'menu_item_category',
     ];
 
+    protected $casts = [
+        'menu_item_available' => 'boolean',
+    ];
+
     public function restaurant()
     {
         return $this->belongsTo(RestaurantModel::class, 'restaurant_id', 'restaurant_id');

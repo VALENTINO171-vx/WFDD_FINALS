@@ -100,9 +100,9 @@ class RestaurantController extends Controller
     }
 
     /**
-     * Show restaurant details
+     * Show restaurant details for frontend users
      */
-    public function show($id)
+    public function details($id)
     {
         try {
             $response = Http::get($this->apiBaseUrl . '/api/restaurants/' . $id);
@@ -112,13 +112,108 @@ class RestaurantController extends Controller
                 $restaurant = $data['restaurant'] ?? null;
                 
                 if ($restaurant) {
-                    return view('admin.show', ['restaurant' => (object)$restaurant]);
+                    return view('restaurant.restaurant', ['restaurant' => $restaurant]);
                 }
             }
             
-            return redirect('/admin')->with('error', 'Restaurant not found');
+            return redirect('/home')->with('error', 'Restaurant not found');
         } catch (\Exception $e) {
-            return redirect('/admin')->with('error', 'Error fetching restaurant: ' . $e->getMessage());
+            return redirect('/home')->with('error', 'Error fetching restaurant: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Submit a new restaurant review
+     */
+    public function submitReview(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'review_rating' => 'required|integer|min:1|max:5',
+            'review_comment' => 'nullable|string|max:1000',
+        ]);
+
+        $userId = session('user_id');
+        if (!$userId) {
+            return redirect('/login')->with('error', 'Please login first');
+        }
+
+        $payload = [
+            'user_id' => $userId,
+            'restaurant_id' => $id,
+            'review_rating' => $validated['review_rating'],
+            'review_comment' => $validated['review_comment'] ?? null,
+        ];
+
+        try {
+            $response = Http::post($this->apiBaseUrl . '/api/restaurants/' . $id . '/reviews', $payload);
+            
+            if ($response->successful()) {
+                return redirect()->route('restaurant.details', $id)->with('success', 'Review submitted successfully!');
+            }
+
+            $message = $response->json('message') ?? 'Failed to submit review';
+            return back()->with('error', $message);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
+        }
+    }
+
+    public function updateReview(Request $request, $restaurantId, $reviewId)
+    {
+        $validated = $request->validate([
+            'review_rating' => 'required|integer|min:1|max:5',
+            'review_comment' => 'nullable|string|max:1000',
+        ]);
+
+        $userId = session('user_id');
+        $userRole = session('user_role');
+        if (!$userId) {
+            return redirect('/login')->with('error', 'Please login first');
+        }
+
+        $payload = [
+            'user_id' => $userId,
+            'user_role' => $userRole,
+            'review_rating' => $validated['review_rating'],
+            'review_comment' => $validated['review_comment'] ?? null,
+        ];
+
+        try {
+            $response = Http::put($this->apiBaseUrl . '/api/reviews/' . $reviewId, $payload);
+            
+            if ($response->successful()) {
+                return redirect()->route('restaurant.details', $restaurantId)->with('success', 'Review updated successfully!');
+            }
+
+            $message = $response->json('message') ?? 'Failed to update review';
+            return back()->with('error', $message);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteReview(Request $request, $restaurantId, $reviewId)
+    {
+        $userId = session('user_id');
+        $userRole = session('user_role');
+        if (!$userId) {
+            return redirect('/login')->with('error', 'Please login first');
+        }
+
+        try {
+            $response = Http::delete($this->apiBaseUrl . '/api/reviews/' . $reviewId, [
+                'user_id' => $userId,
+                'user_role' => $userRole,
+            ]);
+            
+            if ($response->successful()) {
+                return redirect()->route('restaurant.details', $restaurantId)->with('success', 'Review deleted successfully!');
+            }
+
+            $message = $response->json('message') ?? 'Failed to delete review';
+            return back()->with('error', $message);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error connecting to backend API: ' . $e->getMessage());
         }
     }
 

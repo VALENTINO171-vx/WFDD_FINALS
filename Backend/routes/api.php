@@ -21,3 +21,5 @@ Route::get('/restaurants/{id}',[App\Http\Controllers\API\v1\RestaurantController
 
 // restaurant reviews
 Route::post('/restaurants/{id}/reviews',[App\Http\Controllers\API\v1\ReviewController::class,'store']);
+Route::put('/reviews/{id}', [App\Http\Controllers\API\v1\ReviewController::class, 'update']);
+Route::delete('/reviews/{id}', [App\Http\Controllers\API\v1\ReviewController::class, 'destroy']);
